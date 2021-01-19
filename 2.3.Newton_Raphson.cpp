@@ -28,3 +28,8 @@ int main()
     printf("%.6lf",x0);
     return 0;
 }
+/*
+Input is
+1.5
+100
+*/
