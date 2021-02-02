@@ -1,0 +1,130 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ld long double
+
+// ld dfx(ld x,ld y)
+// {
+//     return 2*x;
+// }
+// ld dfy(ld x,ld y)
+// {
+//     return 1;
+// }
+// ld dgx(ld x,ld y)
+// {
+//     return 1;
+// }
+// ld dgy(ld x,ld y)
+// {
+//     return 2*y;
+// }
+// ld f(ld x,ld y)
+// {
+//     return x*x+y-11;
+// }
+// ld g(ld x,ld y)
+// {
+//     return y*y+x-7;
+// }
+
+
+
+
+// ld f(ld x,ld y)
+// {
+//     return x-2*y-2;
+// }
+// ld g(ld x,ld y)
+// {
+//     return y*y-3*x*y+7;
+// }
+// ld dfx(ld x,ld y)
+// {
+//     return 1;
+// }
+// ld dfy(ld x,ld y)
+// {
+//     return -2;
+// }
+// ld dgx(ld x,ld y)
+// {
+//     return -3*y;
+// }
+// ld dgy(ld x,ld y)
+// {
+//     return 2*y-3*x;
+// }
+
+
+
+
+
+ld f(ld x,ld y)
+{
+    return x-x*y+9;
+}
+ld g(ld x,ld y)
+{
+    return x*x-y*y+7;
+}
+ld dfx(ld x,ld y)
+{
+    return 1-y;
+}
+ld dfy(ld x,ld y)
+{
+    return -x;
+}
+ld dgx(ld x,ld y)
+{
+    return 2*x;
+}
+ld dgy(ld x,ld y)
+{
+    return -2*y;
+}
+
+
+vector<vector<ld> > findinv(ld x,ld y)
+{
+    vector<vector<ld> > ans(2,vector<ld>(2));
+    ld d=dfx(x,y)*dgy(x,y)-dfy(x,y)*dgx(x,y);
+    ans[0][0]=dgy(x,y)/d;
+    ans[0][1]=-dfy(x,y)/d;
+    ans[1][0]=-dgx(x,y)/d;
+    ans[1][1]=dfx(x,y)/d;
+    return ans;
+}
+vector<vector<ld> > matmul(vector<vector<ld> > &a,vector<vector<ld> > &b)
+{
+    int n=a.size(),m=b[0].size(),l=b.size();
+    vector<vector<ld> > ans(n,vector<ld>(m,0.0));
+    for(int i=0;i<n;i++)
+        for(int j=0;j<m;j++)
+            for(int k=0;k<l;k++)
+                ans[i][j]+=a[i][k]*b[k][j];
+    return ans;
+}
+int main()
+{
+    long double x=1,y=1;
+    int n=100;
+    for(int itr=1;itr<=n;itr++)
+    {
+        ld d=dfx(x,y)*dgy(x,y)-dfy(x,y)*dgx(x,y);
+        if(fabs(d)<1e-6)
+            break;
+        vector<vector<ld> > t=findinv(x,y);
+        vector<vector<ld> > val={
+            {f(x,y)},
+            {g(x,y)}
+        };
+        t=matmul(t,val);
+        if(fabs(t[0][0])<1e-6 && fabs(t[1][0])<1e-6)
+            break;
+        x-=t[0][0];
+        y-=t[1][0];
+    }
+    printf("Value of x=%.6Lf and y=%.6Lf",x,y);
+    return 0;
+}
